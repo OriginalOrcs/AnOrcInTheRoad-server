@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>socket.io</title>
+</head>
+	<body>
+		Socket
+		<script src="/socket.io/socket.io.js"></script>
+		<script
+		  src="https://code.jquery.com/jquery-3.1.1.min.js"
+		  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+		  crossorigin="anonymous">
+		 </script>
+		<button>Press ME</button>
+		<script>
+		  var socket = io();
+		  socket.on('test', function (data) {
+		    console.log(data);
+		  });
+
+		  socket.on('super', function() {
+		  	console.log('wow')
+		  });
+
+			$('button').click(() => {
+				console.log('clicked');
+				socket.emit('super', {message: 'YEAH'});
+			});
+		</script>
+	</body>
+</html>
