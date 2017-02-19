@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS `Characters`;
 		
 CREATE TABLE `Characters` (
   `id` INTEGER AUTO_INCREMENT,
-  `name` INTEGER NULL DEFAULT NULL,
+  `name` VARCHAR(20) NULL DEFAULT NULL,
   `level` INTEGER NULL DEFAULT NULL,
   `experience` INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -20,10 +20,11 @@ CREATE TABLE `Quests` (
   `id` INTEGER AUTO_INCREMENT,
   -- `item_id` INTEGER NULL DEFAULT NULL,
   `experience` INTEGER NULL DEFAULT NULL,
-  `name` INTEGER NULL DEFAULT NULL,
+  `name` VARCHAR(20) NULL DEFAULT NULL,
   `creator_id` INTEGER NULL DEFAULT NULL,
   `lat` DECIMAL NULL DEFAULT NULL,
   `lng` DECIMAL NULL DEFAULT NULL,
+  `complete` CHAR(6) NULL DEFAULT FALSE,
   PRIMARY KEY (`id`)
 );
 
@@ -32,15 +33,15 @@ CREATE TABLE `Quests` (
 -- CREATE TABLE `Items` (
 --   `id` INTEGER AUTO_INCREMENT,
 --   `user_id` INTEGER NULL DEFAULT NULL,
---   `name` INTEGER NULL DEFAULT NULL,
+--   `name` VARCHAR(20) NULL DEFAULT NULL,
 --   `attack` INTEGER NULL DEFAULT NULL,
 --   `defense` INTEGER NULL DEFAULT NULL,
 --   PRIMARY KEY (`id`)
 -- );
 
-DROP TABLE IF EXISTS `UserQuests`;
+DROP TABLE IF EXISTS `CharacterQuests`;
 		
-CREATE TABLE `UserQuests` (
+CREATE TABLE `CharacterQuests` (
   `id` INTEGER AUTO_INCREMENT,
   `user_id` INTEGER NULL DEFAULT NULL,
   `quest_id` INTEGER NULL DEFAULT NULL,
@@ -50,5 +51,8 @@ CREATE TABLE `UserQuests` (
 -- ALTER TABLE `Quests` ADD FOREIGN KEY (item_id) REFERENCES `Items` (`id`);
 ALTER TABLE `Quests` ADD FOREIGN KEY (creator_id) REFERENCES `Characters` (`id`);
 -- ALTER TABLE `Items` ADD FOREIGN KEY (user_id) REFERENCES `Characters` (`id`);
-ALTER TABLE `UserQuests` ADD FOREIGN KEY (user_id) REFERENCES `Characters` (`id`);
-ALTER TABLE `UserQuests` ADD FOREIGN KEY (quest_id) REFERENCES `Quests` (`id`);
+ALTER TABLE `CharacterQuests` ADD FOREIGN KEY (user_id) REFERENCES `Characters` (`id`);
+ALTER TABLE `CharacterQuests` ADD FOREIGN KEY (quest_id) REFERENCES `Quests` (`id`);
+
+
+INSERT INTO `Characters` (`name`,`level`,`experience`) VALUES ('Aldric Testman', 9001, 42);

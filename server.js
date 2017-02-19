@@ -17,5 +17,10 @@ io.on('connection', function(socket) {
 	console.log('User Connected, ' + sockets.length + ' Socket(s) Upheld');
 	var userIndex = sockets.length - 1;
 
+	socket.on('disconnect', function() {
+		sockets.splice(userIndex, 1);
+		console.log('User Disconnected ' + sockets.length + ' Socket(s) Upheld')
+	});
+
 	socketHandler(socket, io);
 });
