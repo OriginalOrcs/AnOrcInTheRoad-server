@@ -27,7 +27,7 @@ var addFetchQuest = function(quest) {
 	return new Promise(function(resolve, reject) {
 		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, experience: quest.experience, lat: quest.lat, lng: quest.lng}
 		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(function(result) {
-			return getAllQuests().then(resolve)
+			return getAllQuests().then(resolve);
 		});
 	});
 }
@@ -36,7 +36,7 @@ var getAllQuests = function() {
 	return new Promise(function(resolve, reject) {
 		return connection.queryAsync('SELECT * FROM Quests').then(function(result) {
 			return resolve(result);
-		});
+		}).catch(reject);
 	});
 }
 
@@ -44,17 +44,18 @@ var getCharacter = function(id) {
 	return new Promise(function(resolve, reject) {
 		return connection.queryAsync('SELECT * FROM Characters WHERE id = ' + id).then(function(result) {
 			return resolve(result);
-		}); 
+		}).catch(reject); 
 	});
 }
 
 var completeQuest = function(userId, questId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('UPDATE Quests SET complete = ' + userId + ' WHERE id = ' + questId);
+		return connection.queryAsync('UPDATE Quests SET complete = ' + userId + ' WHERE id = ' + questId).then(resolve).catch(reject);
 	});
 }
 
 
+exports.connection = connection;
 
 exports.addFetchQuest = addFetchQuest;
 exports.addQuest = addQuest;
