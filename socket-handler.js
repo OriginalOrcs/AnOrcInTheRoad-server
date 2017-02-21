@@ -6,6 +6,11 @@ var socketHandler = function(socket, io) {
 		io.emit('super', { message: 'Got it' })
 	});
 
+	socket.on('user login', function(user) {
+		console.log('AUTH WORKED!!!')
+		// db.authUser();
+	});
+
 	socket.on('add quest', function(quest) {
 		db.addQuest(quest).then(function(allQuests) {
 			io.emit('update quests', allQuests);

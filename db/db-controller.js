@@ -54,6 +54,12 @@ var completeQuest = function(userId, questId) {
 	});
 }
 
+var authUser = function() {
+	return new Promise(function(resolve, reject) {
+		return redisClient.set()
+	});
+}
+
 
 exports.connection = connection;
 
@@ -62,3 +68,4 @@ exports.addQuest = addQuest;
 exports.getAllQuests = getAllQuests;
 exports.getCharacter = getCharacter;
 exports.completeQuest = completeQuest;
+exports.authUser = authUser;
