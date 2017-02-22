@@ -16,7 +16,7 @@ var socketHandler = function(socket, io) {
 	});
 
 	socket.on('create quest', function(quest) {
-		db.addQuest(quest).then(function(allQuests) {
+		db.addQuest(quest).then(function(allQuests) { 
 			io.emit('update quests', allQuests);
 		})
 	});
