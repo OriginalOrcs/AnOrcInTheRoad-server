@@ -6,7 +6,7 @@ var mysql = require('mysql');
 // var redisClient = redis.createClient();
 
 var connection = mysql.createConnection({
-  host: "localhost",
+  host: process.env.db || "localhost",
   database: "Orc",
   user: "root",
   password: "originalorcs"
