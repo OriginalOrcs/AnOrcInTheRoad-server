@@ -3,8 +3,9 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var socketHandler = require('./socket-handler');
 
-server.listen(3000);
-console.log('Listening');
+var port = process.env.port || 3000
+server.listen(port);
+console.log('Listening on port: ' + port);
 
 var sockets = [];
 

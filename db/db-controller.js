@@ -1,15 +1,15 @@
 var Promise = require('bluebird');
 var mysql = require('mysql');
-var redis = require('redis');
-Promise.promisifyAll(redis.RedisClient.prototype);
-Promise.promisifyAll(redis.Multi.prototype);
-var redisClient = redis.createClient();
+// var redis = require('redis');
+// Promise.promisifyAll(redis.RedisClient.prototype);
+// Promise.promisifyAll(redis.Multi.prototype);
+// var redisClient = redis.createClient();
 
 var connection = mysql.createConnection({
   host: "localhost",
   database: "Orc",
   user: "root",
-  password: ""
+  password: "originalorcs"
 });
 
 connection = Promise.promisifyAll(connection);
@@ -29,6 +29,12 @@ var addFetchQuest = function(quest) {
 		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(function(result) {
 			return getAllQuests().then(resolve);
 		});
+	});
+}
+
+var createCharacter = function(character) {
+	return new Promise(function(resolve, reject) {
+		return connection.queryAsync('INSERT INTO Characters SET ?', character).then(resolve).catch(reject);
 	});
 }
 
@@ -54,12 +60,6 @@ var completeQuest = function(userId, questId) {
 	});
 }
 
-var authUser = function() {
-	return new Promise(function(resolve, reject) {
-		return redisClient.set()
-	});
-}
-
 
 exports.connection = connection;
 
@@ -68,4 +68,3 @@ exports.addQuest = addQuest;
 exports.getAllQuests = getAllQuests;
 exports.getCharacter = getCharacter;
 exports.completeQuest = completeQuest;
-exports.authUser = authUser;
