@@ -6,15 +6,27 @@ var socketHandler = function(socket, io) {
 		io.emit('super', { message: 'Got it' })
 	});
 
+	socket.on('ping', function() {
+		console.log('pong');
+	});
+
 	socket.on('user login', function(user) {
 		console.log('AUTH WORKED!!!')
 		// db.authUser();
 	});
 
-	socket.on('add quest', function(quest) {
+	socket.on('create quest', function(quest) {
 		db.addQuest(quest).then(function(allQuests) {
 			io.emit('update quests', allQuests);
 		})
+	});
+
+	socket.on('create character', function(character) {
+		db.createCharacter(character).then(function() {
+			db.getCharacter(character.userId).then(function(newCharacter) {
+				socket.emit('update character', newCharacter);
+			});
+		});
 	});
 
 	socket.on('get quests', function() {
