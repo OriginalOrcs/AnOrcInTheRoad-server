@@ -5,7 +5,12 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "docker-dev": "docker run -it --rm --name orcServer --link orcDB:mysql -e db='orcDB' -p 3000:3000 -v /Users/Jeremy/Desktop/Hackreactor/AnOrcInTheRoad-server/:/usr/src/app/ anorcintheroad",
+    "docker-start": "docker run -it --rm --name orcServer --link orcDB:mysql -e db='orcDB' -p 3000:3000 -d anorcintheroad",
+    "docker-db-start": "docker start orcDB",
+    "docker-db-stop": "docker stop orcDB",
+    "docker-db-connect": "docker run -it --link orcDB:mysql --rm mysql sh -c 'exec mysql -h\"$MYSQL_PORT_3306_TCP_ADDR\" -P\"$MYSQL_PORT_3306_TCP_PORT\" -uroot -p\"$MYSQL_ENV_MYSQL_ROOT_PASSWORD\"'"
   },
   "repository": {
     "type": "git",
