@@ -62,7 +62,7 @@ var updateCharacter = function(character) {
 var completeQuest = function(characterId, questId) {
 	return new Promise(function(resolve, reject) {
 		return connection.queryAsync('UPDATE Quests SET complete = ' + characterId + ' WHERE id = ' + questId).then(function() {
-			connection.queryAsync('DELETE FROM CharacterQuests WHERE character_id = ' + characterId + 'AND quest_id = ' + questId).then(resolve);
+			connection.queryAsync('DELETE FROM CharacterQuests WHERE quest_id = ' + questId).then(resolve);
 		}).catch(reject);
 	});
 }
