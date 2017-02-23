@@ -6,15 +6,6 @@ var socketHandler = function(socket, io) {
 		io.emit('super', { message: 'Got it' })
 	});
 
-	socket.on('ping', function() {
-		console.log('pong');
-	});
-
-	socket.on('user login', function(user) {
-		console.log('AUTH WORKED!!!')
-		// db.authUser();
-	});
-
 	socket.on('create quest', function(quest) {
 		db.addQuest(quest).then(function(allQuests) { 
 			io.emit('update quests', allQuests);
@@ -29,8 +20,8 @@ var socketHandler = function(socket, io) {
 		});
 	});
 
-	socket.on('get quests', function() {
-		db.getAllQuests().then(function(allQuests) {
+	socket.on('get quests', function(userId) {
+		db.getAllQuests(userId).then(function(allQuests) {
 			socket.emit('update quests', allQuests);
 		});
 	});
@@ -44,6 +35,22 @@ var socketHandler = function(socket, io) {
 	socket.on('complete quest', function(userId, questId) {
 		db.completeQuest(userId, questId).then(function() {
 			db.getAllQuests().then(function(allQuests) {
+				io.emit('update quests', allQuests);
+			});
+		});
+	});
+
+	socket.on('activate quest', function(userId, questId) {
+		db.activateQuest(userId, questId).then(function() {
+			db.getAllQuests(userId).then(function(allQuests) {
+				socket.emit('update quests', allQuests);
+			});
+		});
+	});
+
+	socket.on('deactivate quest', function() {
+		db.deactivateQuest(userId, questId).then(function() {
+			db.getAllQuests(userId).then(function(allQuests) {
 				socket.emit('update quests', allQuests);
 			});
 		});

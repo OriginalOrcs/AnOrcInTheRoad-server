@@ -45,6 +45,7 @@ CREATE TABLE `CharacterQuests` (
   `id` INTEGER AUTO_INCREMENT,
   `user_id` INTEGER NULL DEFAULT NULL,
   `quest_id` INTEGER NULL DEFAULT NULL,
+  `active` CHAR(6) NULL DEFAULT TRUE,
   PRIMARY KEY (`id`)
 );
 
@@ -56,4 +57,7 @@ ALTER TABLE `CharacterQuests` ADD FOREIGN KEY (quest_id) REFERENCES `Quests` (`i
 
 
 INSERT INTO `Characters` (`name`,`level`,`experience`) VALUES ('Aldric Testmane', 9001, 42);
+INSERT INTO `Characters` (`name`,`level`,`experience`) VALUES ('Testalia Greybeard', 9001, 42);
 INSERT INTO `Quests` (`name`,`experience`,`creator_id`,`lat`,`lng`) VALUES ('testQuest', 100, 1, 100, 100);
+INSERT INTO `Quests` (`name`,`experience`,`creator_id`,`lat`,`lng`) VALUES ('anotherTestQuest', 100, 1, 100, 100);
+INSERT INTO `Quests` (`name`,`experience`,`creator_id`,`lat`,`lng`,`complete`) VALUES ('completedTestQuest', 100, 1, 100, 100,TRUE);
