@@ -21,15 +21,6 @@ var addQuest = function(quest) {
 	return new Promise((resolve, reject) => {
 		return that[quest.type](quest).then(resolve);
 	});
-} 
-
-var addFetchQuest = function(quest) {
-	return new Promise(function(resolve, reject) {
-		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, experience: quest.experience, lat: quest.lat, lng: quest.lng}
-		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(function(result) {
-			return getAllQuests().then(resolve);
-		});
-	});
 }
 
 var createCharacter = function(character) {
@@ -38,9 +29,17 @@ var createCharacter = function(character) {
 	});
 }
 
-var getAllQuests = function(userId) {
+var getQuest = function(questId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('SELECT q.id, q.experience, q.name, q.creator_id, q.lat, q.lng, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.user_id = ' + userId +') WHERE q.complete = FALSE').then(function(result) {
+		return connection.queryAsync('SELECT * FROM Quests WHERE id = ' + questId).then(function(quest) { 
+			return resolve(quest);
+		}).catch(reject);
+	});
+}
+
+var getAllQuests = function(characterId) {
+	return new Promise(function(resolve, reject) {
+		return connection.queryAsync('SELECT q.id, q.experience, q.name, q.creator_id, q.lat, q.lng, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId + ') WHERE q.complete = FALSE').then(function(result) {
 			return resolve(result);
 		}).catch(reject);
 	});
@@ -54,23 +53,29 @@ var getCharacter = function(id) {
 	});
 }
 
-var completeQuest = function(userId, questId) {
+var updateCharacter = function(character) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('UPDATE Quests SET complete = ' + userId + ' WHERE id = ' + questId).then(function() {
-			connection.queryAsync('DELETE FROM CharacterQuests WHERE user_id = ' + userId + 'AND quest_id = ' + questId).then(resolve);
+		return connection.queryAsync('UPDATE Characters SET experience = ' + character.experience + ' level = ' + character.level + 'WHERE id = ' + character.id).then(resolve).catch(reject);
+	});
+}
+
+var completeQuest = function(characterId, questId) {
+	return new Promise(function(resolve, reject) {
+		return connection.queryAsync('UPDATE Quests SET complete = ' + characterId + ' WHERE id = ' + questId).then(function() {
+			connection.queryAsync('DELETE FROM CharacterQuests WHERE character_id = ' + characterId + 'AND quest_id = ' + questId).then(resolve);
 		}).catch(reject);
 	});
 }
 
-var activateQuest = function(userId, questId) {
+var activateQuest = function(characterId, questId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('INSERT INTO CharacterQuests SET ?' + {user_id: userId, quest_id: questId}).then(resolve).catch(reject);
+		return connection.queryAsync('INSERT INTO CharacterQuests SET ?' + {character_id: characterId, quest_id: questId}).then(resolve).catch(reject);
 	});
 }
 
-var deactivateQuest = function(userId, questId) {
+var deactivateQuest = function(characterId, questId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('DELETE FROM CharacterQuests WHERE user_id = ' + userId + 'AND quest_id = ' + questId).then(resolve).catch(reject);
+		return connection.queryAsync('DELETE FROM CharacterQuests WHERE character_id = ' + characterId + 'AND quest_id = ' + questId).then(resolve).catch(reject);
 	});
 }
 
@@ -78,6 +83,7 @@ exports.connection = connection;
 
 exports.addFetchQuest = addFetchQuest;
 exports.addQuest = addQuest;
+exports.getQuest = getQuest;
 exports.getAllQuests = getAllQuests;
 exports.getCharacter = getCharacter;
 exports.completeQuest = completeQuest;

@@ -3,6 +3,7 @@ var db = require('./db/db-controller');
 var socketHandler = function(socket, io) {
 
   socket.on('super', function(data) {
+  	//this is for testing
 		io.emit('super', { message: 'Got it' })
 	});
 
@@ -14,14 +15,14 @@ var socketHandler = function(socket, io) {
 
 	socket.on('create character', function(character) {
 		db.createCharacter(character).then(function() {
-			db.getCharacter(character.userId).then(function(newCharacter) {
+			db.getCharacter(character.characterId).then(function(newCharacter) {
 				socket.emit('update character', newCharacter);
 			});
 		});
 	});
 
-	socket.on('get quests', function(userId) {
-		db.getAllQuests(userId).then(function(allQuests) {
+	socket.on('get quests', function(characterId) {
+		db.getAllQuests(characterId).then(function(allQuests) {
 			socket.emit('update quests', allQuests);
 		});
 	});
@@ -32,25 +33,48 @@ var socketHandler = function(socket, io) {
 		});
 	});
 
-	socket.on('complete quest', function(userId, questId) {
-		db.completeQuest(userId, questId).then(function() {
-			db.getAllQuests().then(function(allQuests) {
-				io.emit('update quests', allQuests);
+	socket.on('complete quest', function(characterId, questId) {
+		db.completeQuest(characterId, questId).then(function() {
+			db.getQuest(questId).then(function(quest) {
+				db.getCharacter(characterId).then(function(character) {
+					character.experience = character.experience + quest.experience;
+					if (character.experience >= 100) {
+						character.level = character.level + 1;
+						character.experience = character.experience - 100;
+						db.updateCharacter(character).then(function() {
+							db.getAllQuests().then(function(allQuests) {
+								db.getCharacter(character.id).then(function(updatedCharacter) {
+									socket.emit('update character', updatedCharacter);
+									io.emit('update quests', allQuests);
+								});
+							});
+						});
+					} else {
+						db.updateCharacter(character).then(function() {
+							db.getAllQuests().then(function(allQuests) {
+								db.getCharacter(character.id).then(function(updatedCharacter) {
+									socket.emit('update character', updatedCharacter);
+									io.emit('update quests', allQuests);
+								});
+							});
+						});
+					}
+				});
 			});
 		});
 	});
 
-	socket.on('activate quest', function(userId, questId) {
-		db.activateQuest(userId, questId).then(function() {
-			db.getAllQuests(userId).then(function(allQuests) {
+	socket.on('activate quest', function(characterId, questId) {
+		db.activateQuest(characterId, questId).then(function() {
+			db.getAllQuests(characterId).then(function(allQuests) {
 				socket.emit('update quests', allQuests);
 			});
 		});
 	});
 
 	socket.on('deactivate quest', function() {
-		db.deactivateQuest(userId, questId).then(function() {
-			db.getAllQuests(userId).then(function(allQuests) {
+		db.deactivateQuest(characterId, questId).then(function() {
+			db.getAllQuests(characterId).then(function(allQuests) {
 				socket.emit('update quests', allQuests);
 			});
 		});
