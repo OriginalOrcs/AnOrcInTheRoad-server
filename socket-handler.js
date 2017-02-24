@@ -29,7 +29,11 @@ var socketHandler = function(socket, io) {
 
 	socket.on('get character', function(id) {
 		db.getCharacter(id).then(function(character) {
-			socket.emit('update character', character);
+			if (!character.length) {
+				socket.emit('make character');
+			} else {
+				socket.emit('update character', character);
+			}
 		});
 	});
 
@@ -37,6 +41,7 @@ var socketHandler = function(socket, io) {
 		db.completeQuest(characterId, questId).then(function() {
 			db.getQuest(questId).then(function(quest) {
 				db.getCharacter(characterId).then(function(character) {
+					character = character[0];
 					character.experience = character.experience + quest.experience;
 					if (character.experience >= 100) {
 						character.level = character.level + 1;

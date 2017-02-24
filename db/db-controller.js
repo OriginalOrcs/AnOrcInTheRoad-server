@@ -58,7 +58,7 @@ var getAllQuests = function(characterId) {
 
 var getCharacter = function(id) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('SELECT * FROM Characters WHERE id = ' + id).then(function(result) {
+		return connection.queryAsync('SELECT * FROM Characters WHERE user_id = \"' + id + '\"').then(function(result) {
 			return resolve(result);
 		}).catch(reject); 
 	});
@@ -94,6 +94,7 @@ exports.connection = connection;
 
 exports.addQuest = addQuest;
 exports.addFetchQuest = addFetchQuest;
+exports.createCharacter =createCharacter;
 exports.getQuest = getQuest;
 exports.getAllQuests = getAllQuests;
 exports.getCharacter = getCharacter;
