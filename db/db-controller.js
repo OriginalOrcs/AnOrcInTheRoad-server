@@ -23,7 +23,15 @@ var addQuest = function(quest) {
 	});
 }
 
+var addFetchQuest = function(quest) {
+	return new Promise((resolve, reject) => {
+		return that[quest.type](quest).then(resolve);
+	});
+}
+
 var createCharacter = function(character) {
+	character.level = 1;
+	character.experience = 0;
 	return new Promise(function(resolve, reject) {
 		return connection.queryAsync('INSERT INTO Characters SET ?', character).then(resolve).catch(reject);
 	});
@@ -81,9 +89,12 @@ var deactivateQuest = function(characterId, questId) {
 
 exports.connection = connection;
 
-exports.addFetchQuest = addFetchQuest;
 exports.addQuest = addQuest;
+exports.addFetchQuest = addFetchQuest;
 exports.getQuest = getQuest;
 exports.getAllQuests = getAllQuests;
 exports.getCharacter = getCharacter;
+exports.updateCharacter = updateCharacter;
 exports.completeQuest = completeQuest;
+exports.activateQuest = activateQuest;
+exports.deactivateQuest deactivateQuest;
