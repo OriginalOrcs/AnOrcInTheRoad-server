@@ -24,8 +24,11 @@ var addQuest = function(quest) {
 }
 
 var addFetchQuest = function(quest) {
-	return new Promise((resolve, reject) => {
-		return that[quest.type](quest).then(resolve);
+	return new Promise(function(resolve, reject) {
+		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, experience: quest.experience, lat: quest.lat, lng: quest.lng, type: quest.type}
+		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(function(result) {
+			return getAllQuests().then(resolve);
+		});
 	});
 }
 
