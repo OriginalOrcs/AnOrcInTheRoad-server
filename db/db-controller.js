@@ -100,4 +100,4 @@ exports.getCharacter = getCharacter;
 exports.updateCharacter = updateCharacter;
 exports.completeQuest = completeQuest;
 exports.activateQuest = activateQuest;
-exports.deactivateQuest deactivateQuest;
+exports.deactivateQuest = deactivateQuest;
