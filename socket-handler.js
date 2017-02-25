@@ -78,7 +78,7 @@ var socketHandler = function(socket, io) {
 		});
 	});
 
-	socket.on('deactivate quest', function() {
+	socket.on('deactivate quest', function(characterId, questId) {
 		db.deactivateQuest(characterId, questId).then(function() {
 			db.getAllQuests(characterId).then(function(allQuests) {
 				socket.emit('update quests', allQuests);
