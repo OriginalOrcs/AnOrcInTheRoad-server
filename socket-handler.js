@@ -7,9 +7,10 @@ var socketHandler = function(socket, io) {
 		io.emit('super', { message: 'Got it' })
 	});
 
+
 	socket.on('create quest', function(quest) {
 		db.addQuest(quest).then(function(allQuests) { 
-			io.emit('update quests', allQuests);
+			io.emit('trigger update quests');
 		})
 	});
 
