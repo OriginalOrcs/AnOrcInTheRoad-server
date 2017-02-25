@@ -9,6 +9,7 @@ var socketHandler = function(socket, io) {
 
 
 	socket.on('create quest', function(quest) {
+    console.log('server quest created', quest);
 		db.addQuest(quest).then(function(allQuests) { 
 			io.emit('trigger update quests');
 		})
