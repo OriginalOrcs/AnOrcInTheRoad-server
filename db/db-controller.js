@@ -9,7 +9,7 @@ var connection = mysql.createConnection({
   host: process.env.db || "localhost",
   database: "Orc",
   user: "root",
-  password: "originalorcs"
+  password: ""
 });
 
 connection = Promise.promisifyAll(connection);
@@ -19,15 +19,18 @@ connection.connect();
 // add quest router.
 var addQuest = function(quest) {
 	var that = this;
+  console.log('addquest quest', quest);
+  console.log(quest.questType);
+  console.log(that[quest.questType]);
 	return new Promise((resolve, reject) => {
-		return that[quest.type](quest).then(resolve);
+		return that[quest.questType](quest).then(resolve);
 	});
 }
 
 // adds a fetch quest to the db
 var addFetchQuest = function(quest) {
 	return new Promise(function(resolve, reject) {
-		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, experience: quest.experience, lat: quest.lat, lng: quest.lng, type: quest.type}
+		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, experience: quest.experience, lat: quest.lat, lng: quest.lng, questType: quest.questType}
 		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(resolve);
 	});
 }
@@ -53,7 +56,7 @@ var getQuest = function(questId) {
 // gets all quests
 var getAllQuests = function(characterId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('SELECT q.id, q.experience, q.name, q.creator_id, q.lat, q.lng, q.type, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId + ') WHERE q.complete = FALSE AND q.creator_id != ' + characterId).then(function(result) {
+		return connection.queryAsync('SELECT q.id, q.experience, q.name, q.creator_id, q.lat, q.lng, q.questType, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId + ') WHERE q.complete = FALSE').then(function(result) {
 			return resolve(result);
 		}).catch(reject);
 	});
