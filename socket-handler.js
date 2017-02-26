@@ -49,20 +49,16 @@ var socketHandler = function(socket, io) {
 						character.level = character.level + 1;
 						character.experience = character.experience - 100;
 						db.updateCharacter(character).then(function() {
-							db.getAllQuests().then(function(allQuests) {
-								db.getCharacter(character.id).then(function(updatedCharacter) {
-									socket.emit('update character', updatedCharacter);
-									io.emit('update quests', allQuests);
-								});
+							db.getCharacter(character.id).then(function(updatedCharacter) {
+								socket.emit('update character', updatedCharacter);
+								io.emit('trigger update quests');
 							});
 						});
 					} else {
 						db.updateCharacter(character).then(function() {
-							db.getAllQuests().then(function(allQuests) {
-								db.getCharacter(character.id).then(function(updatedCharacter) {
-									socket.emit('update character', updatedCharacter);
-									io.emit('update quests', allQuests);
-								});
+							db.getCharacter(character.id).then(function(updatedCharacter) {
+								socket.emit('update character', updatedCharacter);
+								io.emit('trigger update quests');
 							});
 						});
 					}
