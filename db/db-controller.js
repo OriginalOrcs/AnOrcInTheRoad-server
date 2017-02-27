@@ -56,7 +56,7 @@ var getQuest = function(questId) {
 // gets all quests
 var getAllQuests = function(characterId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('SELECT q.id, q.experience, q.name, q.creator_id, q.lat, q.lng, q.questType, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId + ') WHERE q.complete = FALSE').then(function(result) {
+		return connection.queryAsync('SELECT q.id, q.experience, q.name, q.creator_id, q.lat, q.lng, q.questType, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id) WHERE q.complete = FALSE AND q.creator_id <> ' + characterId).then(function(result) {
 			return resolve(result);
 		}).catch(reject);
 	});
