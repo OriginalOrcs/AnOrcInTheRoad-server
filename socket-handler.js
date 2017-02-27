@@ -2,14 +2,7 @@ var db = require('./db/db-controller');
 
 var socketHandler = function(socket, io) {
 
-  socket.on('super', function(data) {
-  	//this is for testing
-		io.emit('super', { message: 'Got it' })
-	});
-
-
 	socket.on('create quest', function(quest) {
-    console.log('server quest created', quest);
 		db.addQuest(quest).then(function(allQuests) { 
 			io.emit('trigger update quests');
 		})
@@ -17,8 +10,8 @@ var socketHandler = function(socket, io) {
 
 	socket.on('create character', function(character) {
 		db.createCharacter(character).then(function() {
-			db.getCharacter(character.characterId).then(function(newCharacter) {
-				socket.emit('update character', newCharacter);
+			db.getCharacter(character.user_id).then(function(newCharacter) {
+				socket.emit('update character', newCharacter[0]);
 			});
 		});
 	});
@@ -34,7 +27,7 @@ var socketHandler = function(socket, io) {
 			if (!character.length) {
 				socket.emit('make character');
 			} else {
-				socket.emit('update character', character);
+				socket.emit('update character', character[0]); 
 			}
 		});
 	});
