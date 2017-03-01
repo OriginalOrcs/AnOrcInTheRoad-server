@@ -90,7 +90,7 @@ var completeQuest = function(characterId, questId) {
 // activates a quest in the CharacterQuests table
 var activateQuest = function(characterId, questId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('INSERT INTO CharacterQuests SET ?' + {character_id: characterId, quest_id: questId}).then(resolve).catch(reject);
+		return connection.queryAsync('INSERT INTO CharacterQuests SET ?', {character_id: characterId, quest_id: questId}).then(resolve).catch(reject);
 	});
 }
 
