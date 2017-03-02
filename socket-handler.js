@@ -3,8 +3,10 @@ var db = require('./db/db-controller');
 var socketHandler = function(socket, io) {
 
 	socket.on('create quest', function(quest) {
+    console.log('create quest received', quest);
 		db.addQuest(quest).then(function(allQuests) { 
-			io.emit('trigger update quests');
+			io.emit('trigger update quests', allQuests);
+      console.log('trigger update quests', allQuests);
 		})
 	});
 
@@ -17,12 +19,14 @@ var socketHandler = function(socket, io) {
 	});
 
 	socket.on('get quests', function(characterId) {
+    console.log('get quests', characterId);
 		db.getAllQuests(characterId).then(function(allQuests) {
-			socket.emit('update quests', allQuests);
+      socket.emit('update quests', allQuests);
 		});
 	});
 
 	socket.on('get character', function(id) {
+    console.log('get character', id);
 		db.getCharacter(id).then(function(character) {
 			if (!character.length) {
 				socket.emit('make character');
@@ -33,6 +37,7 @@ var socketHandler = function(socket, io) {
 	});
 
 	socket.on('complete quest', function(characterId, questId) {
+    console.log('complete quest', characterId, questId);
 		db.completeQuest(characterId, questId).then(function() {
 			db.getQuest(questId).then(function(quest) {
 				db.getCharacter(characterId).then(function(character) {
