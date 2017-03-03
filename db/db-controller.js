@@ -7,9 +7,9 @@ var mysql = require('mysql');
 
 var connection = mysql.createConnection({
   host: process.env.TUTUM_API_URL || process.env.db || "localhost",
-  database: "Orc",
-  user: "root",
-  password: "originalorcs"
+  database: process.env.database || "Orc",
+  user: process.env.dbUser || "root",
+  password: process.env.dbPassword ? "" : "originalorcs"
 });
 
 connection = Promise.promisifyAll(connection);
