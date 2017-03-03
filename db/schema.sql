@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS `Orc`;
+-- DROP DATABASE IF EXISTS `Orc`;
 
-CREATE DATABASE `Orc`;
+-- CREATE DATABASE `Orc`;
 
-USE `Orc`;
+-- USE `Orc`;
 
 DROP TABLE IF EXISTS `Characters`;
     
