@@ -1,4 +1,6 @@
 machine:
+  services:
+    - docker
   environment:
     dbUser: ubuntu
     database: circle_test
@@ -7,3 +9,13 @@ machine:
 database:
   override:
     - mysql -u ubuntu circle_test < db/schema.sql
+
+dependencies:
+  override:
+    - docker info
+    - docker build -t perichor/anorcintheroad .
+
+test:
+  override:
+    - docker run -d -p 3000:3000 perichor/anorcintheroad; sleep 10
+    - npm test
