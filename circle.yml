@@ -1,0 +1,9 @@
+deployment:
+production:
+branch: master
+commands:
+- ./deploy_prod.sh
+
+database:
+  override:
+    - mysql -u ubuntu circle_test < db/schema.sql
