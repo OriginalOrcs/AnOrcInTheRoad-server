@@ -10,3 +10,9 @@ git pull origin master
 echo 'Done!'
 
 EOF
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - ./deploy_prod.sh
