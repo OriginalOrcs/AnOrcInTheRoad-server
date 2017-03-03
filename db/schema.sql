@@ -57,7 +57,7 @@ ALTER TABLE `CharacterQuests` ADD FOREIGN KEY (character_id) REFERENCES `Charact
 ALTER TABLE `CharacterQuests` ADD FOREIGN KEY (quest_id) REFERENCES `Quests` (`id`);
 
 
-INSERT INTO `Characters` (`name`,`level`,`experience`) VALUES ('Aldric Testmane', 9001, 42);
+INSERT INTO `Characters` (`name`,`level`,`experience`,`user_id`) VALUES ('Aldric Testmane', 9001, 42, 'test');
 INSERT INTO `Characters` (`name`,`level`,`experience`) VALUES ('Testalia Greybeard', 9001, 42);
 INSERT INTO `Quests` (`name`,`experience`,`creator_id`,`lat`,`lng`) VALUES ('testQuest', 100, 1, 100, 100);
 INSERT INTO `Quests` (`name`,`experience`,`creator_id`,`lat`,`lng`) VALUES ('secondCharTestQuest', 100, 2, 100, 100);

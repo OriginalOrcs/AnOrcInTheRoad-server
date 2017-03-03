@@ -9,7 +9,7 @@ var connection = mysql.createConnection({
   host: process.env.TUTUM_API_URL || process.env.db || "localhost",
   database: process.env.database || "Orc",
   user: process.env.dbUser || "root",
-  password: process.env.dbPassword ? "" : "originalorcs"
+  password: process.env.dbPassword ? "" : ""
 });
 
 connection = Promise.promisifyAll(connection);
