@@ -22,7 +22,7 @@ describe('An Orc in The Road', function() {
 			it('should get all quests', function(done) {
 				var quest = {name: 'testQuest3', type: 'addFetchQuest', creator_id: 1, experience: 100, lat: 100, lng: 100};
 				db.addFetchQuest(quest).then(function() {
-					db.getAllQuests().then(function(result) {
+					db.getAllQuests(2).then(function(result) {
 						expect(!!result[result.length - 1].name).to.equal(true);
 						done();
 					});
@@ -43,7 +43,8 @@ describe('An Orc in The Road', function() {
 		describe('Characters', function() {
 			
 			it('should get a character by id', function(done) {
-				db.getCharacter(1).then(function(result) {
+				db.getCharacter('test').then(function(result) {
+					console.log(result)
 					expect(result[0].name).to.equal('Aldric Testmane');
 					done();
 				});
