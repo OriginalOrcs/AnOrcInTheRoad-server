@@ -8,7 +8,7 @@ echo "pulling latest version of the code"
 ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull perichor/anorcintheroad:latest'
 
 echo "starting the new version"
-ssh $DEPLOY_USER@$DEPLOY_HOST 'docker run -it --rm -d --restart=always -e dbPassword="orcs" --name anOrcInTheRoad -p 80:3000 perichor/anorcintheroad:latest'
+ssh $DEPLOY_USER@$DEPLOY_HOST 'docker run -it -d --restart=always -e dbPassword="orcs" --net=host --name anOrcInTheRoad -p 3000:3000 perichor/anorcintheroad:latest'
 
 echo "success!"
 
