@@ -6,10 +6,10 @@ var mysql = require('mysql');
 // var redisClient = redis.createClient();
 
 var connection = mysql.createConnection({
-  host: process.env.TUTUM_API_URL || process.env.db || "localhost",
+  host: process.env.db || "localhost",
   database: process.env.database || "Orc",
   user: process.env.dbUser || "root",
-  password: process.env.dbPassword ? "" : ""
+  password: process.env.dbPassword ? "orcs" : ""
 });
 
 connection = Promise.promisifyAll(connection);
