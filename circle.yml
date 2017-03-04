@@ -4,7 +4,6 @@ machine:
   environment:
     dbUser: ubuntu
     database: circle_test
-    dbPassword: truth
 
 database:
   override:
