@@ -62,10 +62,19 @@ var getAllQuests = function(characterId) {
 	});
 }
 
-// gets a character
+// gets a character by id
 var getCharacter = function(id) {
 	return new Promise(function(resolve, reject) {
 		return connection.queryAsync('SELECT * FROM Characters WHERE user_id = \"' + id + '\"').then(function(result) {
+			return resolve(result);
+		}).catch(reject); 
+	});
+}
+
+// gets a character by name
+var getCharacter = function(name) {
+	return new Promise(function(resolve, reject) {
+		return connection.queryAsync('SELECT * FROM Characters WHERE name = \"' + name + '\"').then(function(result) {
 			return resolve(result);
 		}).catch(reject); 
 	});
