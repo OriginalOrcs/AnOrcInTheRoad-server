@@ -72,7 +72,7 @@ var getCharacter = function(id) {
 }
 
 // gets a character by name
-var getCharacter = function(name) {
+var getCharacterByName = function(name) {
 	return new Promise(function(resolve, reject) {
 		return connection.queryAsync('SELECT * FROM Characters WHERE name = \"' + name + '\"').then(function(result) {
 			return resolve(result);
