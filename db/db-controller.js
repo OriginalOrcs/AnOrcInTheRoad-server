@@ -19,9 +19,6 @@ connection.connect();
 // add quest router.
 var addQuest = function(quest) {
 	var that = this;
-  console.log('addquest quest', quest);
-  console.log(quest.questType);
-  console.log(that[quest.questType]);
 	return new Promise((resolve, reject) => {
 		return that[quest.questType](quest).then(resolve);
 	});
@@ -30,7 +27,23 @@ var addQuest = function(quest) {
 // adds a fetch quest to the db
 var addFetchQuest = function(quest) {
 	return new Promise(function(resolve, reject) {
-		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, experience: quest.experience, lat: quest.lat, lng: quest.lng, questType: quest.questType}
+		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, lat: quest.lat, lng: quest.lng, questType: quest.questType, timestamp: quest.timestamp}
+		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(resolve);
+	});
+}
+
+// adds a crypto quest to the db
+var addCryptoQuest = function(quest) {
+	return new Promise(function(resolve, reject) {
+		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, lat: quest.lat, created_lat: quest.created_lat, lng: quest.lng, created_lng: quest.created_lng, questType: quest.questType, crypto: quest.crypto, timestamp: quest.timestamp}
+		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(resolve);
+	});
+}
+
+// adds a sundial quest to the db
+var addSunDialQuest = function(quest) {
+	return new Promise(function(resolve, reject) {
+		var bufferQuest = { name: quest.name, creator_id: quest.creator_id, lat: quest.lat, lng: quest.lng, questType: quest.questType, timestamp: quest.timestamp, timestart: quest.timestart, timestop: quest.timestop}
 		return connection.queryAsync('INSERT INTO Quests SET ?', bufferQuest).then(resolve);
 	});
 }
@@ -56,7 +69,7 @@ var getQuest = function(questId) {
 // gets all quests
 var getAllQuests = function(characterId) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('SELECT q.id, q.experience, q.name, q.creator_id, q.lat, q.lng, q.questType, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId +') WHERE q.creator_id <> ' + characterId).then(function(result) {
+		return connection.queryAsync('SELECT q.id, q.name, q.creator_id, q.lat, q.lng, q.questType, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId).then(function(result) {
 			return resolve(result);
 		}).catch(reject);
 	});
@@ -114,10 +127,11 @@ exports.connection = connection;
 
 exports.addQuest = addQuest;
 exports.addFetchQuest = addFetchQuest;
-exports.createCharacter =createCharacter;
+exports.createCharacter = createCharacter;
 exports.getQuest = getQuest;
 exports.getAllQuests = getAllQuests;
 exports.getCharacter = getCharacter;
+exports.getCharacterByName = getCharacterByName;
 exports.updateCharacter = updateCharacter;
 exports.completeQuest = completeQuest;
 exports.activateQuest = activateQuest;
