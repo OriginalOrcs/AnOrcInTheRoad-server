@@ -1,22 +1,6 @@
 var db = require('./db/db-controller');
 
-var parties = {};
-
-var leaveParty = function(characterId) {
-	parties[characterId].characters.forEach(function(character, i) {
-		if (character.id === characterId) {
-			var sockets = parties[characterId].sockets.slice();
-			parties[characterId].characters.splice(i, 1);
-			parties[characterId].sockets.splice(i, 1);
-			parties[characterId] = undefined;
-			parties[characterId].characters.forEach(function(character, i) {
-				parties[character.id].socket[i].emit('update party', parties[character.id].characters);
-			});
-		}
-	});
-}
-
-var socketHandler = function(socket, io, sockets, users) {
+var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 
 	socket.on('create party', function(id) {
 		db.getCharacter(id).then(function(character) {
@@ -194,4 +178,3 @@ var socketHandler = function(socket, io, sockets, users) {
 
 
 module.exports.socketHandler = socketHandler;
-module.exports.leaveParty = leaveParty;
