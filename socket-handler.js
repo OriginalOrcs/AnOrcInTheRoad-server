@@ -40,8 +40,8 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 		parties[inviter.id].sockets.push(users[invitee.id]);
 		parties[inviter.id].characters.push(invitee);
 		parties[invitee.id] = parties[inviter.id];
-		parties[inviter.id].forEach(function(player) {
-			player.emit('update party', parties[player.id].characters);
+		parties[inviter.id].sockets.forEach(function(player) {
+			player.emit('update party', parties[inviter.id].characters);
 		});
 	});
 
