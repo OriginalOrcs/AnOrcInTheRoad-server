@@ -97,8 +97,8 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 					character = character[0];
 					if (parties[character.id]) {
 						parties[character.id].characters.forEach(function(character, i) {
-							var hourDuration = Math.floor((Date.now() - quest.timestamp) / 3600000) + 2;
-							character.experience = character.experience + (hourDuration * 2);
+							var hourDuration = Math.floor((Date.now() - Date.parse(quest.timestamp)) / 3600000);
+							character.experience = character.experience + (hourDuration * 2) + 2;
 							if (character.experience >= 100) {
 								character.level = character.level + 1;
 								character.experience = character.experience - 100;
@@ -118,7 +118,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 							}
 						});
 					} else {
-						var hourDuration = Math.floor((Date.now() - quest.timestamp) / 3600000);
+						var hourDuration = Math.floor((Date.now() - Date.parse(quest.timestamp)) / 3600000);
 						character.experience = character.experience + (hourDuration * 2) + 2;
 						if (character.experience >= 100) {
 							character.level = character.level + 1;
@@ -142,7 +142,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 
 				db.getCharacterById(quest['creator_id']).then(function(character) {
 					character = character[0];
-					var hourDuration = Math.floor((Date.now() - quest.timestamp) / 3600000);
+					var hourDuration = Math.floor((Date.now() - Date.parse(quest.timestamp)) / 3600000);
 					character.experience = character.experience + hourDuration + 1;
 					if (character.experience >= 100) {
 						character.level = character.level + 1;
