@@ -30,9 +30,9 @@ CREATE TABLE `Quests` (
   `crypto` VARCHAR(144) NULL DEFAULT NULL,
   `created_lat` DECIMAL(11,8) NULL DEFAULT NULL,
   `created_lng` DECIMAL(11,8) NULL DEFAULT NULL,
-  `timestamp` BIGINT NULL DEFAULT NULL,
-  `timestart` BIGINT NULL DEFAULT NULL,
-  `timestop` BIGINT NULL DEFAULT NULL,
+  `timestamp` VARCHAR(45) NULL DEFAULT NULL,
+  `timestart` VARCHAR(45) NULL DEFAULT NULL,
+  `timestop` VARCHAR(45) NULL DEFAULT NULL,
   `questType` VARCHAR(20) NULL DEFAULT 'addFetchQuest',
   PRIMARY KEY (`id`)
 );
