@@ -1,8 +1,8 @@
--- DROP DATABASE IF EXISTS `Orc`;
+DROP DATABASE IF EXISTS `Orc`;
 
--- CREATE DATABASE `Orc`;
+CREATE DATABASE `Orc`;
 
--- USE `Orc`;
+USE `Orc`;
 
 DROP TABLE IF EXISTS `Characters`;
     
@@ -29,9 +29,9 @@ CREATE TABLE `Quests` (
   `crypto` VARCHAR(144) NULL DEFAULT NULL,
   `created_lat` DECIMAL(11,8) NULL DEFAULT NULL,
   `created_lng` DECIMAL(11,8) NULL DEFAULT NULL,
-  `timestamp` INTEGER NULL DEFAULT NULL,
-  `timestart` INTEGER NULL DEFAULT NULL,
-  `timestop` INTEGER NULL DEFAULT NULL,
+  `timestamp` BIGINT NULL DEFAULT NULL,
+  `timestart` BIGINT NULL DEFAULT NULL,
+  `timestop` BIGINT NULL DEFAULT NULL,
   `questType` VARCHAR(20) NULL DEFAULT 'addFetchQuest',
   PRIMARY KEY (`id`)
 );
