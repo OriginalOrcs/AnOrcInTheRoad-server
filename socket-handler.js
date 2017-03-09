@@ -15,6 +15,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 			target = target[0];
 			if (!parties[target.id]) {
 				db.getCharacter(characterId).then(function(inviter) {
+					inviter = inviter[0];
 					users[target.id].emit('party invite', {inviter: inviter, invitee: target});
 				});
 			} else {
