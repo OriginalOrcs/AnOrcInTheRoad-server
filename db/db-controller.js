@@ -84,6 +84,15 @@ var getCharacter = function(id) {
 	});
 }
 
+// gets a character by id
+var getCharacterById = function(characterId) {
+	return new Promise(function(resolve, reject) {
+		return connection.queryAsync('SELECT * FROM Characters WHERE id = ' + characterId).then(function(result) {
+			return resolve(result);
+		}).catch(reject); 
+	});
+}
+
 // gets a character by name
 var getCharacterByName = function(name) {
 	return new Promise(function(resolve, reject) {
@@ -133,6 +142,7 @@ exports.createCharacter = createCharacter;
 exports.getQuest = getQuest;
 exports.getAllQuests = getAllQuests;
 exports.getCharacter = getCharacter;
+exports.getCharacterById = getCharacterById;
 exports.getCharacterByName = getCharacterByName;
 exports.updateCharacter = updateCharacter;
 exports.completeQuest = completeQuest;

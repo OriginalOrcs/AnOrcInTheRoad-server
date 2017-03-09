@@ -92,7 +92,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 	socket.on('complete quest', function(characterId, questId) {
 		db.completeQuest(characterId, questId).then(function() {
 			db.getQuest(questId).then(function(quest) {
-				db.getCharacter(characterId).then(function(character) {
+				db.getCharacterById(characterId).then(function(character) {
 					character = character[0];
 					if (parties[character.id]) {
 						parties[character.id].characters.forEach(function(character, i) {
@@ -102,14 +102,14 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 								character.level = character.level + 1;
 								character.experience = character.experience - 100;
 								db.updateCharacter(character).then(function() {
-									db.getCharacter(character.id).then(function(updatedCharacter) {
+									db.getCharacterById(character.id).then(function(updatedCharacter) {
 										parties[character.id].sockets[i].emit('update character', updatedCharacter);
 										io.emit('trigger update quests');
 									});
 								});
 							} else {
 								db.updateCharacter(character).then(function() {
-									db.getCharacter(character.id).then(function(updatedCharacter) {
+									db.getCharacterById(character.id).then(function(updatedCharacter) {
 										parties[character.id].sockets[i].emit('update character', updatedCharacter);
 										io.emit('trigger update quests');
 									});
@@ -123,14 +123,14 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 							character.level = character.level + 1;
 							character.experience = character.experience - 100;
 							db.updateCharacter(character).then(function() {
-								db.getCharacter(character.id).then(function(updatedCharacter) {
+								db.getCharacterById(character.id).then(function(updatedCharacter) {
 									socket.emit('update character', updatedCharacter);
 									io.emit('trigger update quests');
 								});
 							});
 						} else {
 							db.updateCharacter(character).then(function() {
-								db.getCharacter(character.id).then(function(updatedCharacter) {
+								db.getCharacterById(character.id).then(function(updatedCharacter) {
 									socket.emit('update character', updatedCharacter);
 									io.emit('trigger update quests');
 								});
@@ -139,7 +139,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 					}
 				});
 
-				db.getCharacter(quest['creator_id']).then(function(character) {
+				db.getCharacterById(quest['creator_id']).then(function(character) {
 					character = character[0];
 					var hourDuration = Math.floor((Date.now() - quest.timestamp) / 3600000);
 					character.experience = character.experience + hourDuration;
@@ -147,7 +147,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 						character.level = character.level + 1;
 						character.experience = character.experience - 100;
 						db.updateCharacter(character).then(function() {
-							db.getCharacter(character.id).then(function(updatedCharacter) {
+							db.getCharacterById(character.id).then(function(updatedCharacter) {
 								if (users['creator_id']) {
 									user.emit('update character', updatedCharacter);	
 								}
@@ -155,7 +155,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 						});
 					} else {
 						db.updateCharacter(character).then(function() {
-							db.getCharacter(character.id).then(function(updatedCharacter) {
+							db.getCharacterById(character.id).then(function(updatedCharacter) {
 								if (users['creator_id']) {
 									user.emit('update character', updatedCharacter);	
 								}
