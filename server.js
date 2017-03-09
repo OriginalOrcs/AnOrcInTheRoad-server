@@ -3,7 +3,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var socketHandler = require('./socket-handler').socketHandler;
 
-var port = process.env.port || 3000
+var port = process.env.port || 3000;
 server.listen(port);
 console.log('Listening on port: ' + port);
 
@@ -23,6 +23,7 @@ var leaveParty = function(characterId) {
 			parties[characterId].sockets.forEach(function(socket, i) {
 				socket.emit('update party', parties[sockets[socket.id]].characters);
 			});
+			users[characterId].emit('update party', []);
 		}
 	});
 }
@@ -37,10 +38,10 @@ io.on('connection', function(socket) {
 
 	socket.on('disconnect', function() {
 		console.log('User Disconnected ' + sockets.length + ' Socket(s) Upheld')
-		delete users[sockets[socket.id]];
 		if (parties[sockets[socket.id]]) {
 			leaveParty(sockets[socket.id]);
 		}
+		delete users[sockets[socket.id]];
 	});
 
 	socketHandler(socket, io, sockets, users, parties, leaveParty);
