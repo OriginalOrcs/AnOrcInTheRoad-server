@@ -13,13 +13,17 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 	socket.on('add to party', function(characterId, targetName) {
 		db.getCharacterByName(targetName).then(function(target) {
 			target = target[0];
-			if (!parties[target.id]) {
-				db.getCharacter(characterId).then(function(inviter) {
-					inviter = inviter[0];
-					users[target.id].emit('party invite', {inviter: inviter, invitee: target});
-				});
+			if (users[target.id]) {
+				if (!parties[target.id]) {
+					db.getCharacter(characterId).then(function(inviter) {
+						inviter = inviter[0];
+						users[target.id].emit('party invite', {inviter: inviter, invitee: target});
+					});
+				} else {
+					socket.emit('reject user already in party');
+				}
 			} else {
-				socket.emit('reject user already in party');
+				socket.emit('reject user not online');
 			}
 		});
 	});
