@@ -12,6 +12,7 @@ CREATE TABLE `Characters` (
   `level` INTEGER NULL DEFAULT NULL,
   `experience` INTEGER NULL DEFAULT NULL,
   `user_id` VARCHAR(45) NULL DEFAULT NULL,
+  `classType` VARCHAR(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 

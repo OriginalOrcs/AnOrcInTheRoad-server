@@ -64,7 +64,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 	socket.on('create character', function(character) {
 		db.createCharacter(character).then(function() {
 			db.getCharacter(character.user_id).then(function(newCharacter) {
-				users[character[0].id] = socket;
+				users[newCharacter[0].id] = socket;
 				sockets[socket.id] = character[0];
 				socket.emit('update character', newCharacter[0]);
 			});
