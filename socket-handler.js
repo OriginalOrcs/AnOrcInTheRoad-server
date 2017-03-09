@@ -21,13 +21,13 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 							users[target.id].emit('party invite', {inviter: inviter, invitee: target});
 						});
 					} else {
-						socket.emit('reject user already in party');
+						socket.emit('reject user already in party', target);
 					}
 				} else {
-					socket.emit('reject user not online');
+					socket.emit('reject user not online', target);
 				}
 			} else {
-				socket.emit('reject user does not exist');
+				socket.emit('reject user does not exist', target);
 			}
 		});
 	});
