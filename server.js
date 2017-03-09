@@ -18,11 +18,12 @@ var leaveParty = function(characterId) {
 	parties[characterId].characters.forEach(function(character, i) {
 		if (character.id === characterId) {
 			var sockets = parties[characterId].sockets.slice();
+			var characters = parties[characterId].characters.slice();
 			parties[characterId].characters.splice(i, 1);
 			parties[characterId].sockets.splice(i, 1);
-			parties[characterId] = undefined;
-			parties[characterId].characters.forEach(function(character, i) {
-				parties[character.id].socket[i].emit('update party', parties[character.id].characters);
+			delete parties[characterId];
+			sockets.forEach(function(socket, i) {
+				socket.emit('update party', parties[characters[i].id].characters);
 			});
 		}
 	});
