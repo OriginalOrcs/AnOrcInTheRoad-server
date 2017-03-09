@@ -92,6 +92,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 	socket.on('complete quest', function(characterId, questId) {
 		db.completeQuest(characterId, questId).then(function() {
 			db.getQuest(questId).then(function(quest) {
+				quest = quest[0];
 				db.getCharacterById(characterId).then(function(character) {
 					character = character[0];
 					if (parties[character.id]) {
@@ -103,14 +104,14 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 								character.experience = character.experience - 100;
 								db.updateCharacter(character).then(function() {
 									db.getCharacterById(character.id).then(function(updatedCharacter) {
-										parties[character.id].sockets[i].emit('update character', updatedCharacter);
+										parties[character.id].sockets[i].emit('update character', updatedCharacter[0]);
 										io.emit('trigger update quests');
 									});
 								});
 							} else {
 								db.updateCharacter(character).then(function() {
 									db.getCharacterById(character.id).then(function(updatedCharacter) {
-										parties[character.id].sockets[i].emit('update character', updatedCharacter);
+										parties[character.id].sockets[i].emit('update character', updatedCharacter[0]);
 										io.emit('trigger update quests');
 									});
 								});
@@ -124,14 +125,14 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 							character.experience = character.experience - 100;
 							db.updateCharacter(character).then(function() {
 								db.getCharacterById(character.id).then(function(updatedCharacter) {
-									socket.emit('update character', updatedCharacter);
+									socket.emit('update character', updatedCharacter[0]);
 									io.emit('trigger update quests');
 								});
 							});
 						} else {
 							db.updateCharacter(character).then(function() {
 								db.getCharacterById(character.id).then(function(updatedCharacter) {
-									socket.emit('update character', updatedCharacter);
+									socket.emit('update character', updatedCharacter[0]);
 									io.emit('trigger update quests');
 								});
 							});
@@ -149,7 +150,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 						db.updateCharacter(character).then(function() {
 							db.getCharacterById(character.id).then(function(updatedCharacter) {
 								if (users['creator_id']) {
-									user.emit('update character', updatedCharacter);	
+									user.emit('update character', updatedCharacter[0]);	
 								}
 							});
 						});
@@ -157,7 +158,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 						db.updateCharacter(character).then(function() {
 							db.getCharacterById(character.id).then(function(updatedCharacter) {
 								if (users['creator_id']) {
-									user.emit('update character', updatedCharacter);	
+									user.emit('update character', updatedCharacter[0]);	
 								}
 							});
 						});
