@@ -68,11 +68,11 @@ var getQuest = function(questId) {
 
 // gets all quests
 var getAllQuests = function(characterId) {
-	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('SELECT q.id, q.name, q.creator_id, q.lat, q.lng, q.questType, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId + ')').then(function(result) {
-			return resolve(result);
-		}).catch(reject);
-	});
+  return new Promise(function(resolve, reject) {
+    return connection.queryAsync('SELECT q.id, q.name, q.creator_id, q.lat, q.lng, q.questType, q.complete, q.created_lat, q.created_lng, q.timestamp, q.timestart, q.timestop, c.active FROM Quests q LEFT OUTER JOIN CharacterQuests c ON (q.id = c.quest_id AND c.character_id = ' + characterId +')').then(function(result) {
+      return resolve(result);
+    }).catch(reject);
+  });
 }
 
 // gets a character by id
@@ -127,6 +127,8 @@ exports.connection = connection;
 
 exports.addQuest = addQuest;
 exports.addFetchQuest = addFetchQuest;
+exports.addCryptoQuest = addCryptoQuest;
+exports.addSunDialQuest = addSunDialQuest;
 exports.createCharacter = createCharacter;
 exports.getQuest = getQuest;
 exports.getAllQuests = getAllQuests;
