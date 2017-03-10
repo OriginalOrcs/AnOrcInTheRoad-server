@@ -23,7 +23,7 @@ var leaveParty = function(characterId) {
 				socket.emit('update party', parties[sockets[socket.id].id].characters);
 			});
 			delete parties[characterId];
-			users[characterId].emit('update party', []);
+			users[characterId].emit('update party', {quest: null, members: []});
 		}
 	});
 }
