@@ -2,21 +2,21 @@ var db = require('./db/db-controller');
 
 var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 
-	socket.on('create party', function(id) {
+	socket.on('create party', function(id, quest) {
 		db.getCharacter(id).then(function(character) {
-			parties[character[0].id] = {sockets: [socket], characters: [character[0]]};
+			parties[character[0].id] = {sockets: [socket], characters: [character[0]], quest: quest};
 			socket.emit('party created');
-			socket.emit('update party', parties[character[0].id].characters);
+			socket.emit('update party', {quest: quest, members: parties[character[0].id].characters});
 		});
 	});
 
-	socket.on('add to party', function(characterId, targetName) {
+	socket.on('add to party', function(id, targetName) {
 		db.getCharacterByName(targetName).then(function(target) {
 			target = target[0];
 			if (target)	{
 				if (users[target.id]) {
 					if (!parties[target.id]) {
-						db.getCharacter(characterId).then(function(inviter) {
+						db.getCharacter(id).then(function(inviter) {
 							inviter = inviter[0];
 							users[target.id].emit('party invite', {inviter: inviter, invitee: target});
 						});
@@ -41,7 +41,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 		parties[inviter.id].characters.push(invitee);
 		parties[invitee.id] = parties[inviter.id];
 		parties[inviter.id].sockets.forEach(function(player) {
-			player.emit('update party', parties[inviter.id].characters);
+			player.emit('update party', {quest: parties[invitee.id].characters.quest, members: parties[invitee.id].characters});
 		});
 	});
 
@@ -52,7 +52,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 	});
 
 	socket.on('get party', function(characterId) {
-		socket.emit('update party', parties[characterId].characters);
+		socket.emit('update party', {quest: parties[characterId].characters.quest, members: parties[characterId].characters});
 	});
 
 	socket.on('create quest', function(quest) {
@@ -98,7 +98,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 					if (parties[character.id]) {
 						parties[character.id].characters.forEach(function(character, i) {
 							var hourDuration = Math.floor((Date.now() - Date.parse(quest.timestamp)) / 3600000);
-							character.experience = character.experience + (hourDuration * 2) + 2;
+							character.experience = character.experience + (hourDuration * 2) + 4;
 							if (character.experience >= 100) {
 								character.level = character.level + 1;
 								character.experience = character.experience - 100;
@@ -119,7 +119,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 						});
 					} else {
 						var hourDuration = Math.floor((Date.now() - Date.parse(quest.timestamp)) / 3600000);
-						character.experience = character.experience + (hourDuration * 2) + 2;
+						character.experience = character.experience + (hourDuration * 2) + 4;
 						if (character.experience >= 100) {
 							character.level = character.level + 1;
 							character.experience = character.experience - 100;
@@ -143,7 +143,7 @@ var socketHandler = function(socket, io, sockets, users, parties, leaveParty) {
 				db.getCharacterById(quest['creator_id']).then(function(character) {
 					character = character[0];
 					var hourDuration = Math.floor((Date.now() - Date.parse(quest.timestamp)) / 3600000);
-					character.experience = character.experience + hourDuration + 1;
+					character.experience = character.experience + hourDuration + 2;
 					if (character.experience >= 100) {
 						character.level = character.level + 1;
 						character.experience = character.experience - 100;

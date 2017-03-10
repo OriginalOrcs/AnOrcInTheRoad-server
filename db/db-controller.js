@@ -105,7 +105,7 @@ var getCharacterByName = function(name) {
 // updates a character
 var updateCharacter = function(character) {
 	return new Promise(function(resolve, reject) {
-		return connection.queryAsync('UPDATE Characters SET experience = ' + character.experience + ', level = ' + character.level + 'WHERE id = ' + character.id).then(resolve).catch(reject);
+		return connection.queryAsync('UPDATE Characters SET experience = ' + character.experience + ', level = ' + character.level + ' WHERE id = ' + character.id).then(resolve).catch(reject);
 	});
 }
 
