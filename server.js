@@ -20,7 +20,7 @@ var leaveParty = function(characterId) {
 			parties[characterId].characters.splice(i, 1);
 			parties[characterId].sockets.splice(i, 1);
 			parties[characterId].sockets.forEach(function(socket, i) {
-				socket.emit('update party', parties[sockets[socket.id]].characters);
+				socket.emit('update party', parties[sockets[socket.id].id].characters);
 			});
 			delete parties[characterId];
 			users[characterId].emit('update party', []);
